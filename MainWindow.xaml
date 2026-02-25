@@ -1,0 +1,165 @@
+﻿<Window x:Class="ТФЯК__1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ТФЯК__1"
+        mc:Ignorable="d"
+        Title="Компилятор (GUI)"
+        Height="600"
+        Width="900"
+        Background="#F0F0F0"
+        Icon="Images/0.ico"
+        WindowStartupLocation="CenterScreen">
+
+    <DockPanel LastChildFill="True">
+
+        <Menu DockPanel.Dock="Top">
+
+            <MenuItem Header="Файл">
+                <MenuItem Header="Создать" Click="New_Click"/>
+                <MenuItem Header="Открыть" Click="Open_Click"/>
+                <MenuItem Header="Сохранить" Click="Save_Click"/>
+                <MenuItem Header="Сохранить как" Click="SaveAs_Click"/>
+                <Separator/>
+                <MenuItem Header="Выход" Click="Exit_Click"/>
+            </MenuItem>
+
+            <MenuItem Header="Правка">
+                <MenuItem Header="Отменить" Click="Undo_Click"/>
+                <MenuItem Header="Повторить" Click="Redo_Click"/>
+                <Separator/>
+                <MenuItem Header="Вырезать" Click="Cut_Click"/>
+                <MenuItem Header="Копировать" Click="Copy_Click"/>
+                <MenuItem Header="Вставить" Click="Paste_Click"/>
+                <MenuItem Header="Удалить" Click="Delete_Click"/>
+                <Separator/>
+                <MenuItem Header="Выделить всё" Click="SelectAll_Click"/>
+            </MenuItem>
+
+            <MenuItem Header="Текст">
+                <MenuItem Header="Постановка задачи"/>
+                <MenuItem Header="Грамматика"/>
+                <MenuItem Header="Классификация грамматики"/>
+                <MenuItem Header="Метод анализа"/>
+                <MenuItem Header="Тестовый пример"/>
+                <MenuItem Header="Список литературы"/>
+                <MenuItem Header="Исходный код программы"/>
+            </MenuItem>
+
+            <MenuItem Header="Пуск"/>
+
+            <MenuItem Header="Справка">
+                <MenuItem Header="Вызов справки" Click="Help_Click"/>
+                <MenuItem Header="О программе" Click="About_Click"/>
+            </MenuItem>
+
+        </Menu>
+
+        <ToolBar DockPanel.Dock="Top">
+
+            <Button Width="32" Height="32" ToolTip="Создать" Click="New_Click">
+                <Image Source="Images/1.png"/>
+            </Button>
+
+            <Button Width="32" Height="32" ToolTip="Открыть" Click="Open_Click">
+                <Image Source="Images/2.png"/>
+            </Button>
+
+            <Button Width="32" Height="32" ToolTip="Сохранить" Click="Save_Click">
+                <Image Source="Images/3.png"/>
+            </Button>
+
+            <Separator/>
+
+            <Button Width="32" Height="32" ToolTip="Отменить" Click="Undo_Click">
+                <Image Source="Images/4.png"/>
+            </Button>
+
+            <Button Width="32" Height="32" ToolTip="Повторить" Click="Redo_Click">
+                <Image Source="Images/5.png"/>
+            </Button>
+
+            <Separator/>
+
+            <Button Width="32" Height="32" ToolTip="Копировать" Click="Copy_Click">
+                <Image Source="Images/6.png"/>
+            </Button>
+
+            <Button Width="32" Height="32" ToolTip="Вырезать" Click="Cut_Click">
+                <Image Source="Images/7.png"/>
+            </Button>
+
+            <Button Width="32" Height="32" ToolTip="Вставить" Click="Paste_Click">
+                <Image Source="Images/8.png"/>
+            </Button>
+
+            <Separator/>
+
+            <Button Width="32" Height="32" ToolTip="Пуск">
+                <Image Source="Images/9.png"/>
+            </Button>
+
+            <Separator/>
+
+            <Button Width="32" Height="32" ToolTip="Справка" Click="Help_Click">
+                <Image Source="Images/10.png"/>
+            </Button>
+
+            <Button Width="32" Height="32" ToolTip="О программе" Click="About_Click">
+                <Image Source="Images/11.png"/>
+            </Button>
+
+        </ToolBar>
+
+        <Grid Margin="15">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="8"/>
+                <RowDefinition Height="160"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Background="White"
+                    BorderBrush="Gray"
+                    BorderThickness="1"
+                    CornerRadius="3"
+                    Margin="5">
+
+                <TextBox x:Name="Editor"
+                         BorderThickness="0"
+                         AcceptsReturn="True"
+                         AcceptsTab="True"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         FontFamily="Consolas"
+                         FontSize="14"/>
+            </Border>
+
+            <GridSplitter Grid.Row="1"
+                          Height="6"
+                          HorizontalAlignment="Stretch"
+                          Background="#CCCCCC"
+                          ResizeDirection="Rows"/>
+
+            <Border Grid.Row="2"
+                    Background="White"
+                    BorderBrush="Gray"
+                    BorderThickness="1"
+                    CornerRadius="3"
+                    Margin="5">
+
+                <TextBox x:Name="OutputBox"
+                         BorderThickness="0"
+                         IsReadOnly="True"
+                         AcceptsReturn="True"
+                         VerticalScrollBarVisibility="Auto"
+                         FontFamily="Consolas"
+                         FontSize="13"/>
+            </Border>
+
+        </Grid>
+
+    </DockPanel>
+</Window>
