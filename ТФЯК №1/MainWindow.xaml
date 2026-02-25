@@ -156,10 +156,11 @@
                          AcceptsReturn="True"
                          VerticalScrollBarVisibility="Auto"
                          FontFamily="Consolas"
-                         FontSize="13"/>
+                         FontSize="14"/>
             </Border>
 
         </Grid>
 
     </DockPanel>
 </Window>
+
