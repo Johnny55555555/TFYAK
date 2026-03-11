@@ -1,6 +1,10 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ТФЯК__1
 {
@@ -12,17 +16,21 @@ namespace ТФЯК__1
         public MainWindow()
         {
             InitializeComponent();
+
             Editor.TextChanged += Editor_TextChanged;
+            ResultGrid.MouseDoubleClick += ResultGrid_MouseDoubleClick;
+
+            this.Closing += MainWindow_Closing;
         }
 
-        private void Editor_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void Editor_TextChanged(object sender, TextChangedEventArgs e)
         {
             isTextChanged = true;
         }
 
         private bool CheckSaveChanges()
         {
-            if (!isTextChanged)
+            if (!isTextChanged && string.IsNullOrWhiteSpace(Editor.Text))
                 return true;
 
             var result = MessageBox.Show(
@@ -36,16 +44,18 @@ namespace ТФЯК__1
                 Save_Click(null, null);
                 return true;
             }
-            else if (result == MessageBoxResult.No)
-            {
+
+            if (result == MessageBoxResult.No)
                 return true;
-            }
-            else
-            {
-                return false; // Cancel
-            }
+
+            return false;
         }
 
+        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (!CheckSaveChanges())
+                e.Cancel = true;
+        }
 
         private void New_Click(object sender, RoutedEventArgs e)
         {
@@ -53,7 +63,8 @@ namespace ТФЯК__1
                 return;
 
             Editor.Clear();
-            OutputBox.Clear();
+            ResultGrid.ItemsSource = null;
+
             currentFilePath = "";
             isTextChanged = false;
         }
@@ -63,13 +74,16 @@ namespace ТФЯК__1
             if (!CheckSaveChanges())
                 return;
 
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
 
-            if (openFileDialog.ShowDialog() == true)
+            if (dialog.ShowDialog() == true)
             {
-                currentFilePath = openFileDialog.FileName;
+                currentFilePath = dialog.FileName;
                 Editor.Text = File.ReadAllText(currentFilePath);
+
+                ResultGrid.ItemsSource = null;
+
                 isTextChanged = false;
             }
         }
@@ -88,12 +102,12 @@ namespace ТФЯК__1
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Текстовые файлы (*.txt)|*.txt|Все файлы (*.*)|*.*";
 
-            if (saveFileDialog.ShowDialog() == true)
+            if (dialog.ShowDialog() == true)
             {
-                currentFilePath = saveFileDialog.FileName;
+                currentFilePath = dialog.FileName;
                 File.WriteAllText(currentFilePath, Editor.Text);
                 isTextChanged = false;
             }
@@ -115,41 +129,74 @@ namespace ТФЯК__1
         private void Delete_Click(object sender, RoutedEventArgs e) => Editor.SelectedText = "";
         private void SelectAll_Click(object sender, RoutedEventArgs e) => Editor.SelectAll();
 
+        private void Run_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                LexicalAnalyzer scanner = new LexicalAnalyzer();
+                List<Token> tokens = scanner.Analyze(Editor.Text);
+
+                ResultGrid.ItemsSource = tokens;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    "Ошибка анализа:\n" + ex.Message,
+                    "Ошибка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void ResultGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (ResultGrid.SelectedItem is Token token)
+            {
+                int index = GetIndexFromLineColumn(token.Line, token.Start);
+
+                if (index >= 0)
+                {
+                    Editor.Focus();
+                    Editor.Select(index, token.End - token.Start + 1);
+                }
+            }
+        }
+
+        private int GetIndexFromLineColumn(int line, int column)
+        {
+            int currentLine = 1;
+            int currentColumn = 1;
+
+            for (int i = 0; i < Editor.Text.Length; i++)
+            {
+                if (currentLine == line && currentColumn == column)
+                    return i;
+
+                if (Editor.Text[i] == '\n')
+                {
+                    currentLine++;
+                    currentColumn = 1;
+                }
+                else
+                {
+                    currentColumn++;
+                }
+            }
+
+            return -1;
+        }
 
         private void Help_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(
-                "СПРАВКА ПО ПРОГРАММЕ \"Компилятор (GUI)\"\n\n" +
-
-                "        МЕНЮ ФАЙЛ         \n" +
-                "Создать – очищает редактор и создаёт новый документ.\n" +
-                "Открыть – открывает текстовый файл (*.txt).\n" +
-                "Сохранить – сохраняет текущий файл.\n" +
-                "Сохранить как – сохраняет файл под новым именем.\n" +
-                "Выход – закрывает программу.\n\n" +
-
-                "        МЕНЮ ПРАВКА        \n" +
-                "Отменить – отменяет последнее действие.\n" +
-                "Повторить – возвращает отменённое действие.\n" +
-                "Вырезать – удаляет выделенный текст и копирует его.\n" +
-                "Копировать – копирует выделенный текст.\n" +
-                "Вставить – вставляет текст из буфера обмена.\n" +
-                "Удалить – удаляет выделенный фрагмент.\n" +
-                "Выделить всё – выделяет весь текст в редакторе.\n\n" +
-
-                "         МЕНЮ ТЕКСТ        \n" +
-                "Раздел предназначен для отображения теоретической части проекта.\n\n" +
-
-                "         ПУСК         \n" +
-                "Кнопка предназначена для запуска процесса анализа текста\n" +
-                "(в текущей версии функционал не реализован).\n\n" +
-
-                "         ОБЛАСТИ ПРОГРАММЫ        \n" +
-                "Верхняя область – редактор исходного текста.\n" +
-                "Нижняя область – окно вывода результатов анализа.\n" +
-                "Между ними расположен разделитель для изменения размеров областей.\n\n" +
-
-                "Разработчик: Студент Пузырный Д.А.",
+                "Лексический анализатор.\n\n" +
+                "Программа выполняет разбор текста и выделяет лексемы:\n" +
+                "- ключевые слова\n" +
+                "- идентификаторы\n" +
+                "- числа\n" +
+                "- строки\n" +
+                "- операторы и разделители.\n\n" +
+                "Для запуска анализа нажмите кнопку \"Пуск\".",
                 "Справка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -158,10 +205,12 @@ namespace ТФЯК__1
         private void About_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(
-                "Компилятор (GUI)\n\n" +
-                "Версия 1.0\n\n" +
-                "Студент Пузырный Д.А.",
-                "О программе");
+                "Компилятор (ЛР2)\n\n" +
+                "Лексический анализатор\n\n" +
+                "Студент: Пузырный Д.А.",
+                "О программе",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
     }
 }
