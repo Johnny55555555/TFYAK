@@ -115,7 +115,7 @@ const char text[5] = "Privet";
 Диаграмма состояний:
 
 <p align="center">
-<img src="Скриншоты/diagram.png" width="600">
+<img src="Скриншоты/1.1.png" width="600">
 </p>
 
 ---
@@ -185,5 +185,6 @@ const char name[] = "World";
 * Среда разработки: **Microsoft Visual Studio 2022**
 * Система контроля версий: **Git**
 * Репозиторий: **GitHub**
+
 
 
