@@ -153,6 +153,8 @@ const char str[] = "Hello";
 
 Выход:
 
+<p align="center"> <img src="Скриншоты/2.1.png" width="500"> </p>
+
 
 
 ## 9.2 Строка с недопустимым символом
@@ -164,6 +166,7 @@ const char str[] = "Hello"@
 ```
 Выход:
 
+<p align="center"> <img src="Скриншоты/2.2.png" width="500"> </p>
 
 ## 9.3 Многострочный пример
 
@@ -176,6 +179,8 @@ const char name[] = "World";
 
 Выход:
 
+<p align="center"> <img src="Скриншоты/2.3.png" width="500"> </p>
+
 
 # 10. Используемые технологии
 
@@ -185,6 +190,7 @@ const char name[] = "World";
 * Среда разработки: **Microsoft Visual Studio 2022**
 * Система контроля версий: **Git**
 * Репозиторий: **GitHub**
+
 
 
 
