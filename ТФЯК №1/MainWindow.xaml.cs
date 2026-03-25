@@ -133,10 +133,26 @@ namespace ТФЯК__1
         {
             try
             {
+                ResultGrid.ItemsSource = null;
+
                 LexicalAnalyzer scanner = new LexicalAnalyzer();
                 List<Token> tokens = scanner.Analyze(Editor.Text);
 
-                ResultGrid.ItemsSource = tokens;
+                SyntaxAnalyzer parser = new SyntaxAnalyzer();
+                var errors = parser.Analyze(tokens);
+
+                ResultGrid.ItemsSource = errors;
+
+                ErrorCount.Text = $"Ошибок: {errors.Count}";
+
+                if (errors.Count == 0)
+                {
+                    MessageBox.Show(
+                        "Синтаксических ошибок не обнаружено",
+                        "Анализ завершён",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -150,14 +166,14 @@ namespace ТФЯК__1
 
         private void ResultGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (ResultGrid.SelectedItem is Token token)
+            if (ResultGrid.SelectedItem is SyntaxError error)
             {
-                int index = GetIndexFromLineColumn(token.Line, token.Start);
+                int index = GetIndexFromLineColumn(error.Line, error.Column);
 
                 if (index >= 0)
                 {
                     Editor.Focus();
-                    Editor.Select(index, token.End - token.Start + 1);
+                    Editor.Select(index, 1);
                 }
             }
         }
@@ -189,14 +205,9 @@ namespace ТФЯК__1
         private void Help_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(
-                "Лексический анализатор.\n\n" +
-                "Программа выполняет разбор текста и выделяет лексемы:\n" +
-                "- ключевые слова\n" +
-                "- идентификаторы\n" +
-                "- числа\n" +
-                "- строки\n" +
-                "- операторы и разделители.\n\n" +
-                "Для запуска анализа нажмите кнопку \"Пуск\".",
+                "Синтаксический анализатор.\n\n" +
+                "Программа выполняет синтаксический разбор конструкции:\n" +
+                "const char name[10] = \"text\";",
                 "Справка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -205,8 +216,8 @@ namespace ТФЯК__1
         private void About_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(
-                "Компилятор (ЛР2)\n\n" +
-                "Лексический анализатор\n\n" +
+                "Компилятор (ЛР3)\n\n" +
+                "Синтаксический анализатор\n\n" +
                 "Студент: Пузырный Д.А.",
                 "О программе",
                 MessageBoxButton.OK,
