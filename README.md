@@ -86,6 +86,11 @@ G[z] = (Vt, Vn, Z, P)
 
 ```
 Vt = {const, char, [, ], =, letter, digit, space, symbols, ;, _}
+
+
+letter -> a | b | c | ... | z | A | ... | Z
+digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+symbols -> letter | digit | "_" | " " | "." | "," | ...
 ```
 
 ### Нетерминальные символы
@@ -104,17 +109,34 @@ Z = <start>
 
 ```
 1) <start> -> "const" <space>
+
 2) <space> -> "_" <type>
+
 3) <type> -> "char" <spaceafter>
+
 4) <spaceafter> -> "_" <ID>
-5) <ID> -> "letter" <IDREM>
-6) <IDREM> -> "letter" <IDREM> | "digit" <IDREM> | "[" <COUNT>
-7) <COUNT> -> "digit" <COUNT> | "]" <COUNTREM>
+
+5) <ID> -> letter <IDREM>
+
+6) <IDREM> -> letter <IDREM> 
+            | digit <IDREM> 
+            | "[" <COUNT>
+
+7) <COUNT> -> digit <COUNT> 
+            | "]" <COUNTREM>
+
 8) <COUNTREM> -> "=" <ASSIGN>
-9) <ASSIGN> -> """ <string>
-10) <string> -> "letter" <strsym>
-11) <strsym> -> "symbols" <strsym> | """ <strrem>
+
+9) <ASSIGN> -> "\"" <string>
+
+10) <string> -> letter <strsym>
+
+11) <strsym> -> symbols <strsym> 
+             | "\"" <strrem>
+
 12) <strrem> -> ";" <stop>
+
+13) <stop> -> ε
 ```
 
 ---
