@@ -85,12 +85,8 @@ G[z] = (Vt, Vn, Z, P)
 ### Терминальные символы
 
 ```
-Vt = {const, char, [, ], =, letter, digit, space, symbols, ;, _}
+Vt = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9,!,@,#,$,%,^,&,*,(,),-,_,=,+,[,],{,},;, :,',",\,|,,,<,.,>,/,?,`,~}
 
-
-letter -> a | b | c | ... | z | A | ... | Z
-digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-symbols -> letter | digit | "_" | " " | "." | "," | ...
 ```
 
 ### Нетерминальные символы
@@ -136,7 +132,12 @@ Z = <start>
 
 12) <strrem> -> ";" <stop>
 
-13) <stop> -> ε
+13) letter -> {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+
+14)digit -> {0,1,2,3,4,5,6,7,8,9}
+
+15)symbols -> {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9,!,@,#,$,%,^,&,*,(,),-,_,=,+,[,],{,},;, :,',",\,|,,,<,.,>,/,?,`,~}
+
 ```
 
 ---
