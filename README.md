@@ -92,7 +92,7 @@ Vt = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,
 ### Нетерминальные символы
 
 ```
-Vn = {<start>, <space>, <type>, <spaceafter>, <ID>, <IDREM>, <COUNT>, <COUNTREM>, <ASSIGN>, <string>, <strsym>, <strrem>, <stop>}
+Vn = {<start>, <space>, <type>, <spaceafter>, <ID>, <IDREM>, <COUNT>, <COUNTREM>, <COUNTTAIL>, <ASSIGN>, <string>, <strsym>, <strrem>, <stop>}
 ```
 
 ### Начальный символ
@@ -104,6 +104,8 @@ Z = <start>
 ### Правила грамматики
 
 ```
+P = 
+
 1) <start> -> "const" <space>
 
 2) <space> -> "_" <type>
@@ -118,25 +120,27 @@ Z = <start>
             | digit <IDREM> 
             | "[" <COUNT>
 
-7) <COUNT> -> digit <COUNT> 
-            | "]" <COUNTREM>
+7) <COUNT> -> digit <COUNTTAIL>
 
-8) <COUNTREM> -> "=" <ASSIGN>
+8) <COUNTTAIL> -> digit <COUNTTAIL>
+             | "]" <COUNTREM>
 
-9) <ASSIGN> -> "\"" <string>
+9) <COUNTREM> -> "=" <ASSIGN>
 
-10) <string> -> letter <strsym>
+10) <ASSIGN> -> "\"" <string>
 
-11) <strsym> -> symbols <strsym> 
+11) <string> -> letter <strsym>
+
+12) <strsym> -> symbols <strsym> 
              | "\"" <strrem>
 
-12) <strrem> -> ";" <stop>
+13) <strrem> -> ";" <stop>
 
-13) letter -> {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+14) letter -> {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
 
-14)digit -> {0,1,2,3,4,5,6,7,8,9}
+15) digit -> {0,1,2,3,4,5,6,7,8,9}
 
-15)symbols -> {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9,!,@,#,$,%,^,&,*,(,),-,_,=,+,[,],{,},;, :,',",\,|,,,<,.,>,/,?,`,~}
+16) symbols -> {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9,!,@,#,$,%,^,&,*,(,),-,_,=,+,[,],{,},;, :,',",\,|,,,<,.,>,/,?,`,~}
 
 ```
 
