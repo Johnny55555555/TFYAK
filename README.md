@@ -116,24 +116,17 @@ P =
 
 5) <ID> -> letter <IDREM>
 
-6) <IDREM> -> letter <IDREM>
-            | digit <IDREM>
-            | "[" <COUNT>
+6) <IDREM> -> letter <IDREM> | digit <IDREM> | "[" <COUNT>
 
 7) <COUNT> -> digit <COUNTTAIL>
 
-8) <COUNTTAIL> -> digit <COUNTTAIL>
-                | "]" <COUNTREM>
+8) <COUNTTAIL> -> digit <COUNTTAIL> | "]" <COUNTREM>
 
 9) <COUNTREM> -> "=" <ASSIGN>
 
-10) <ASSIGN> -> "\"" <strsym>
-              | "\"" "\""<strrem>
+10) <ASSIGN> -> "\"" <string> 
 
-11) <strsym> -> symbols <strsym>
-              | letter <strsym>
-              | digit <strsym>
-              | "\"" <strrem>
+11) <string> -> letter <strsym> | "\"" <strrem>
 
 12) <strrem> -> ";"
 
