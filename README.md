@@ -104,7 +104,7 @@ Z = <start>
 ### Правила грамматики
 
 ```
-P = 
+P =
 
 1) <start> -> "const" <space>
 
@@ -116,31 +116,32 @@ P =
 
 5) <ID> -> letter <IDREM>
 
-6) <IDREM> -> letter <IDREM> 
-            | digit <IDREM> 
+6) <IDREM> -> letter <IDREM>
+            | digit <IDREM>
             | "[" <COUNT>
 
 7) <COUNT> -> digit <COUNTTAIL>
 
 8) <COUNTTAIL> -> digit <COUNTTAIL>
-             | "]" <COUNTREM>
+                | "]" <COUNTREM>
 
 9) <COUNTREM> -> "=" <ASSIGN>
 
-10) <ASSIGN> -> "\"" <string>
+10) <ASSIGN> -> "\"" <strsym>
+              | "\"" "\""<strrem>
 
-11) <string> -> letter <strsym>
+11) <strsym> -> symbols <strsym>
+              | letter <strsym>
+              | digit <strsym>
+              | "\"" <strrem>
 
-12) <strsym> -> symbols <strsym> 
-             | "\"" <strrem>
+12) <strrem> -> ";"
 
-13) <strrem> -> ";" 
+13) letter -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z
 
-14) letter -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z
+14) digit -> 0|1|2|3|4|5|6|7|8|9
 
-15) digit -> 0|1|2|3|4|5|6|7|8|9
-
-16) symbols -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|0|1|2|3|4|5|6|7|8|9|!|@|#|$|%|^|&|*|(|)|-|_|=|+|[|]|{|}|;| :|'|"|\|||,|,|.|>|/|?|`|~
+15) symbols -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|0|1|2|3|4|5|6|7|8|9|!|@|#|$|%|^|&|*|(|)|-|_|=|+|[|]|{|}|;| :|'|"|\|||,|,|.|>|/|?|`|~
 
 ```
 
