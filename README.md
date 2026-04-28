@@ -92,7 +92,7 @@ Vt = {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,
 ### Нетерминальные символы
 
 ```
-Vn = {<start>, <space>, <type>, <spaceafter>, <ID>, <IDREM>, <COUNT>, <COUNTREM>, <COUNTTAIL>, <ASSIGN>, <string>, <strsym>, <strrem>, <stop>}
+Vn = {<start>, <space>, <type>, <spaceafter>, <ID>, <IDREM>, <COUNT>, <COUNTREM>, <COUNTTAIL>, <ASSIGN>, <string>, <strsym>, <strrem>}
 ```
 
 ### Начальный символ
@@ -134,13 +134,13 @@ P =
 12) <strsym> -> symbols <strsym> 
              | "\"" <strrem>
 
-13) <strrem> -> ";" <stop>
+13) <strrem> -> ";" 
 
-14) letter -> {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+14) letter -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z
 
-15) digit -> {0,1,2,3,4,5,6,7,8,9}
+15) digit -> 0|1|2|3|4|5|6|7|8|9
 
-16) symbols -> {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9,!,@,#,$,%,^,&,*,(,),-,_,=,+,[,],{,},;, :,',",\,|,,,<,.,>,/,?,`,~}
+16) symbols -> a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|0|1|2|3|4|5|6|7|8|9|!|@|#|$|%|^|&|*|(|)|-|_|=|+|[|]|{|}|;| :|'|"|\|||,|,|.|>|/|?|`|~
 
 ```
 
