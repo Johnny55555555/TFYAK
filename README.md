@@ -78,7 +78,7 @@ ConstArrayDeclNode
 ```
 
 
-<img src="Снимок 1.png" width="700">
+<img src="Скриншоты/Снимок 1.png" width="700">
 
 
 
