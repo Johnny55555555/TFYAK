@@ -81,6 +81,10 @@ ConstArrayDeclNode
 <img src="Скриншоты/Снимок 1.png" width="700">
 
 
+<img src="Скриншоты/Снимок 2.png" width="700">
+
+
+<img src="Скриншоты/Снимок 3.png" width="700">
 
 
 ## Инструкция по запуску
