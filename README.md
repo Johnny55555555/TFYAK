@@ -37,6 +37,7 @@ sudo apt install -y clang llvm llvm-dev llvm-runtime graphviz xdg-utils
 ````
 
 <img src="Скриншоты/С1.png" width="700">
+
 **Рисунок 1 — установка пакетов LLVM, Clang и Graphviz**
 
 После установки были проверены версии основных инструментов. Проверка выполнялась командами clang --version, opt --version, dot -V и llvm-config --version.
@@ -48,7 +49,11 @@ dot -V
 llvm-config --version
 ```
 
+<img src="Скриншоты/С1.png" width="700">
+
 **Рисунок 2 — проверка версий Clang, opt, Graphviz и создание рабочей папки**
+
+<img src="Скриншоты/С1.png" width="700">
 
 **Рисунок 3 — дополнительная проверка команды llvm-config --version**
 
@@ -87,6 +92,8 @@ grep -A25 "FunctionDecl.*square" ast_main.txt
 grep -A45 "FunctionDecl.*main" ast_main.txt
 ```
 
+<img src="Скриншоты/С1.png" width="700">
+
 **Рисунок 4 — фрагмент AST для функций square и main**
 
 В AST функция square представлена узлом FunctionDecl. Параметр x отображается как ParmVarDecl, а операция x * x — как BinaryOperator. Функция main также представлена как FunctionDecl, внутри которого видны объявления переменных, вызов square и вызов printf.
@@ -109,7 +116,11 @@ grep -n "define\|alloca\|load\|store\|call" main_00.ll
 grep -n "define\|alloca\|load\|store\|call\|printf" main_02.ll
 ```
 
+<img src="Скриншоты/С1.png" width="700">
+
 **Рисунок 5 — LLVM IR без оптимизации для main.c**
+
+<img src="Скриншоты/С1.png" width="700">
 
 **Рисунок 6 — сравнение ключевых инструкций в IR без оптимизации и после -O2**
 
@@ -143,7 +154,11 @@ dot -Tpng .main.dot -o cfg_main_00.png
 dot -Tpng .square.dot -o cfg_square_00.png
 ```
 
+<img src="Скриншоты/С1.png" width="700">
+
 **Рисунок 7 — создание dot-файлов и png-файлов CFG для main.c без оптимизации**
+
+<img src="Скриншоты/С1.png" width="700">
 
 **Рисунок 8 — CFG функций main и square без оптимизации**
 
@@ -155,9 +170,15 @@ dot -Tpng .main.dot -o cfg_main_02.png
 dot -Tpng .square.dot -o cfg_square_02.png
 ```
 
+<img src="Скриншоты/С1.png" width="700">
+
 **Рисунок 9 — создание CFG для main.c после оптимизации -O2**
 
+<img src="Скриншоты/С1.png" width="700">
+
 **Рисунок 10 — CFG функции main после оптимизации -O2**
+
+<img src="Скриншоты/С1.png" width="700">
 
 **Рисунок 11 — CFG функции square после оптимизации -O2**
 
