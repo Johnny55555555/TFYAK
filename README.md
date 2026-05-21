@@ -164,122 +164,129 @@ dot -Tpng .square.dot -o cfg_square_02.png
 
 ---
 
+
+
+
+
 # Индивидуальное задание
 
 ## 1. Исходная конструкция
 
-Индивидуальное задание относится к варианту 2.6: форматирование / парсинг научной нотации. Для анализа был создан файл notation.c.
+Индивидуальное задание относится к варианту 2.8: строковые константы. Для анализа был создан файл strings.c.
 
 ```c
 #include <stdio.h>
-#include <stdlib.h>
 
 int main() {
-    const char* str = "3.14e2";
-    double value = strtod(str, NULL);
-    printf("%f\n", value);
+    const char* msg = "Hello, World!";
+    printf("%s\n", msg);
     return 0;
 }
-```
+````
 
-**Рисунок 12 — исходный код notation.c**
+**Рисунок 12 — исходный код strings.c**
 
 image
 
-Строка "3.14e2" является записью числа в научной нотации. Математически она соответствует значению 314.0. Функция strtod преобразует строку в значение типа double.
+Строковый литерал "Hello, World!" сохраняется в секции констант программы. Указатель msg содержит адрес этой строки, после чего строка передается в printf для вывода на экран.
 
 ---
 
 ## 2. AST индивидуального задания
 
 ```bash
-clang -Xclang -ast-dump -fsyntax-only notation.c > ast_notation.txt
-grep -A60 "FunctionDecl.*main" ast_notation.txt
+clang -Xclang -ast-dump -fsyntax-only strings.c > ast_strings.txt
+grep -A60 "FunctionDecl.*main" ast_strings.txt
 ```
 
 **Рисунок 13 — AST функции main для индивидуального задания**
 
 image
 
-В AST видно объявление строки, строковый литерал "3.14e2", вызов функции strtod и вызов printf. Вызов strtod представлен как CallExpr, а строка — как StringLiteral.
+В AST видно объявление указателя msg, строковый литерал "Hello, World!" и вызов функции printf. Строка представлена узлом StringLiteral, а вызов printf — узлом CallExpr.
 
 ---
 
 ## 3. LLVM IR индивидуального задания
 
 ```bash
-clang -O0 -S -emit-llvm notation.c -o notation_00.ll
-clang -O2 -S -emit-llvm notation.c -o notation_02.ll
+clang -O0 -S -emit-llvm strings.c -o strings_00.ll
+clang -O2 -S -emit-llvm strings.c -o strings_02.ll
 ```
 
-Для просмотра ключевых инструкций были использованы команды grep по словам define, alloca, store, load, strtod и printf.
+Для просмотра ключевых инструкций были использованы команды grep по словам define, alloca, store, load, private и printf.
 
 ```bash
-grep -n "define\|alloca\|store\|load\|strtod\|printf" notation_00.ll
-grep -n "define\|alloca\|store\|load\|strtod\|printf" notation_02.ll
+grep -n "define\|alloca\|store\|load\|private\|printf" strings_00.ll
+grep -n "define\|alloca\|store\|load\|private\|printf" strings_02.ll
 ```
 
-**Рисунок 14 — IR notation.c без оптимизации**
+**Рисунок 14 — IR strings.c без оптимизации**
 
 image
 
-**Рисунок 15 — сравнение ключевых инструкций IR notation.c до и после оптимизации**
+**Рисунок 15 — сравнение ключевых инструкций IR strings.c до и после оптимизации**
 
 image
 
-В IR без оптимизации присутствуют alloca, store и load. После применения -O2 эти инструкции исчезают, однако вызов strtod сохраняется.
+В IR без оптимизации присутствуют инструкции alloca, store и load. Строковый литерал хранится как глобальная константа. После применения -O2 лишние операции работы с памятью удаляются, а обращение к строке становится более компактным.
 
 ---
 
 ## 4. Сравнение IR индивидуального задания
 
 ```bash
-diff notation_00.ll notation_02.ll
+opt -passes=mergefunc,mergeicmps -S strings_02.ll -o strings_merge.ll
+diff strings_02.ll strings_merge.ll
 ```
 
-**Рисунок 16 — сравнение notation_00.ll и notation_02.ll через diff**
+**Рисунок 16 — сравнение strings_02.ll и strings_merge.ll через diff**
 
 image
 
-В оптимизированном IR остаются вызовы strtod и printf. При этом strtod не заменяется на константу 314.0. Это связано с тем, что strtod является библиотечной функцией парсинга строки, поведение которой может зависеть от стандартной библиотеки, локали и обработки ошибок. LLVM не обязан вычислять такой вызов на этапе компиляции.
+При оптимизации одинаковые строковые литералы могут быть объединены в одну глобальную константу. LLVM старается не дублировать одинаковые строки в памяти, что уменьшает размер итогового бинарного файла.
 
 ---
 
 ## 5. CFG индивидуального задания
 
 ```bash
-opt -passes=dot-cfg -disable-output notation_00.ll
-dot -Tpng .main.dot -o cfg_notation_00.png
-xdg-open cfg_notation_00.png
+opt -passes=dot-cfg -disable-output strings_00.ll
+dot -Tpng .main.dot -o cfg_strings_00.png
+xdg-open cfg_strings_00.png
 ```
 
-**Рисунок 17 — создание CFG для notation.c без оптимизации**
+**Рисунок 17 — создание CFG для strings.c без оптимизации**
 
 image
 
-**Рисунок 18 — CFG функции main для notation.c без оптимизации**
+**Рисунок 18 — CFG функции main для strings.c без оптимизации**
 
 image
 
 ```bash
-opt -passes=dot-cfg -disable-output notation_02.ll
-dot -Tpng .main.dot -o cfg_notation_02.png
-xdg-open cfg_notation_02.png
+opt -passes=dot-cfg -disable-output strings_02.ll
+dot -Tpng .main.dot -o cfg_strings_02.png
+xdg-open cfg_strings_02.png
 ```
 
-**Рисунок 19 — CFG функции main для notation.c после оптимизации -O2**
+**Рисунок 19 — CFG функции main для strings.c после оптимизации -O2**
 
 image
 
-Так как в индивидуальной программе нет условий и циклов, CFG также состоит из одного базового блока. Оптимизация меняет содержимое блока, но не создает новых ветвлений.
+Так как в программе отсутствуют условные операторы и циклы, CFG состоит из одного базового блока. После оптимизации изменяется только содержимое блока, но структура управления остается линейной.
 
 ---
 
 ## 6. Вывод по индивидуальному заданию
 
-На уровне AST строка "3.14e2" представлена как строковый литерал, а вызов strtod — как выражение вызова функции. В IR без оптимизации компилятор сохраняет локальные переменные и операции работы с памятью. После оптимизации -O2 лишние alloca, store и load удаляются, но strtod остается как библиотечный вызов. Следовательно, LLVM выполняет локальное упрощение IR, но не сворачивает strtod("3.14e2", NULL) в константу 314.0.
+На уровне AST строковый литерал "Hello, World!" представлен как узел StringLiteral, а вызов printf — как выражение вызова функции. В LLVM IR строка хранится как глобальная константа. В неоптимизированном IR присутствуют alloca, store и load, однако после применения -O2 лишние операции удаляются. LLVM способен объединять одинаковые строковые литералы, уменьшая объем используемой памяти и размер итогового исполняемого файла.
 
 ---
+
+```
+```
+
 
 # Выводы
 
@@ -374,5 +381,4 @@ opt -passes=dot-cfg -disable-output notation_00.ll
 opt -passes=dot-cfg -disable-output notation_02.ll
 ```
 
-```
 ```
