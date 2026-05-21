@@ -19,21 +19,20 @@
 
 sudo apt update
 sudo apt install -y clang llvm llvm-dev llvm-runtime graphviz xdg-utils
+
 Рисунок 1 — установка пакетов LLVM, Clang и Graphviz
 
-image
 После установки были проверены версии основных инструментов. Проверка выполнялась командами clang --version, opt --version, dot -V и llvm-config --version.
 
 clang --version
 opt --version
 dot -V
 llvm-config --version
+
 Рисунок 2 — проверка версий Clang, opt, Graphviz и создание рабочей папки
 
-image
 Рисунок 3 — дополнительная проверка команды llvm-config --version
 
-image
 2. Исходный код main.c
 Для освоения инструментов был создан файл main.c с функцией square и функцией main.
 
@@ -57,9 +56,9 @@ int main() {
 clang -Xclang -ast-dump -fsyntax-only main.c > ast_main.txt
 grep -A25 "FunctionDecl.*square" ast_main.txt
 grep -A45 "FunctionDecl.*main" ast_main.txt
+
 Рисунок 4 — фрагмент AST для функций square и main
 
-image
 В AST функция square представлена узлом FunctionDecl. Параметр x отображается как ParmVarDecl, а операция x * x — как BinaryOperator. Функция main также представлена как FunctionDecl, внутри которого видны объявления переменных, вызов square и вызов printf.
 
 4. Генерация LLVM IR
@@ -71,12 +70,11 @@ clang -O2 -S -emit-llvm main.c -o main_02.ll
 
 grep -n "define\|alloca\|load\|store\|call" main_00.ll
 grep -n "define\|alloca\|load\|store\|call\|printf" main_02.ll
+
 Рисунок 5 — LLVM IR без оптимизации для main.c
 
-image
 Рисунок 6 — сравнение ключевых инструкций в IR без оптимизации и после -O2
 
-image
 В IR без оптимизации присутствуют инструкции alloca, store и load. Это значит, что локальные переменные размещаются в памяти, а значения явно записываются и считываются. Также видно, что функция square вызывается отдельно.
 
 После оптимизации -O2 лишние операции работы с памятью исчезают. Вызов square(5) фактически упрощается до готового значения 25, которое передается в printf. Это показывает работу таких оптимизаций, как встраивание короткой функции, свертка констант и удаление лишних операций.
@@ -98,12 +96,11 @@ CFG строился с помощью инструмента opt. Для IR б�
 opt -passes=dot-cfg -disable-output main_00.ll
 dot -Tpng .main.dot -o cfg_main_00.png
 dot -Tpng .square.dot -o cfg_square_00.png
+
 Рисунок 7 — создание dot-файлов и png-файлов CFG для main.c без оптимизации
 
-image
 Рисунок 8 — CFG функций main и square без оптимизации
 
-image
 После оптимизации -O2 CFG был построен аналогичным способом.
 
 opt -passes=dot-cfg -disable-output main_02.ll
@@ -111,13 +108,10 @@ dot -Tpng .main.dot -o cfg_main_02.png
 dot -Tpng .square.dot -o cfg_square_02.png
 Рисунок 9 — создание CFG для main.c после оптимизации -O2
 
-image
 Рисунок 10 — CFG функции main после оптимизации -O2
 
-image
 Рисунок 11 — CFG функции square после оптимизации -O2
 
-image
 Так как программа не содержит условных операторов и циклов, CFG для каждой функции состоит из одного базового блока. После оптимизации меняется содержимое блока, но структура управления остается линейной.
 
 Индивидуальное задание
@@ -189,7 +183,7 @@ image
 6. Вывод по индивидуальному заданию
 На уровне AST строка "3.14e2" представлена как строковый литерал, а вызов strtod — как выражение вызова функции. В IR без оптимизации компилятор сохраняет локальные переменные и операции работы с памятью. После оптимизации -O2 лишние alloca, store и load удаляются, но strtod остается как библиотечный вызов. Следовательно, LLVM выполняет локальное упрощение IR, но не сворачивает strtod("3.14e2", NULL) в константу 314.0.
 
-4. Выводы
+Выводы
 
 
 Ответы на контрольные вопросы
