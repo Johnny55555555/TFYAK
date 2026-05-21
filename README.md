@@ -198,7 +198,7 @@ int main() {
 
 **Рисунок 9 — исходный код strings.c**
 
-image
+<img src="Скриншоты/С10.png" width="700">
 
 Строковый литерал "Hello, World!" сохраняется в секции констант программы. Указатель msg содержит адрес этой строки, после чего строка передается в printf для вывода на экран.
 
@@ -213,7 +213,7 @@ grep -A60 "FunctionDecl.*main" ast_strings.txt
 
 **Рисунок 10 — AST функции main для индивидуального задания**
 
-image
+<img src="Скриншоты/С11.png" width="700">
 
 В AST видно объявление указателя msg, строковый литерал "Hello, World!" и вызов функции printf. Строка представлена узлом StringLiteral, а вызов printf — узлом CallExpr.
 
@@ -235,11 +235,8 @@ grep -n "define\|alloca\|store\|load\|private\|printf" strings_02.ll
 
 **Рисунок 11 — IR strings.c без оптимизации**
 
-image
+<img src="Скриншоты/С12.png" width="700">
 
-**Рисунок 12 — сравнение ключевых инструкций IR strings.c до и после оптимизации**
-
-image
 
 В IR без оптимизации присутствуют инструкции alloca, store и load. Строковый литерал хранится как глобальная константа. После применения -O2 лишние операции работы с памятью удаляются, а обращение к строке становится более компактным.
 
@@ -252,9 +249,9 @@ opt -passes=mergefunc,mergeicmps -S strings_02.ll -o strings_merge.ll
 diff strings_02.ll strings_merge.ll
 ```
 
-**Рисунок 13 — сравнение strings_02.ll и strings_merge.ll через diff**
+**Рисунок 12 — сравнение strings_02.ll и strings_merge.ll через diff**
 
-image
+<img src="Скриншоты/С12.png" width="700">
 
 При оптимизации одинаковые строковые литералы могут быть объединены в одну глобальную константу. LLVM старается не дублировать одинаковые строки в памяти, что уменьшает размер итогового бинарного файла.
 
@@ -268,7 +265,7 @@ dot -Tpng .main.dot -o cfg_strings_00.png
 xdg-open cfg_strings_00.png
 ```
 
-**Рисунок 14 — CFG функции main для strings.c без оптимизации**
+**Рисунок 13 — CFG функции main для strings.c без оптимизации**
 
 image
 
@@ -278,7 +275,7 @@ dot -Tpng .main.dot -o cfg_strings_02.png
 xdg-open cfg_strings_02.png
 ```
 
-**Рисунок 15 — CFG функции main для strings.c после оптимизации -O2**
+**Рисунок 14 — CFG функции main для strings.c после оптимизации -O2**
 
 image
 
