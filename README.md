@@ -196,7 +196,7 @@ int main() {
 }
 ````
 
-**Рисунок 12 — исходный код strings.c**
+**Рисунок 9 — исходный код strings.c**
 
 image
 
@@ -211,7 +211,7 @@ clang -Xclang -ast-dump -fsyntax-only strings.c > ast_strings.txt
 grep -A60 "FunctionDecl.*main" ast_strings.txt
 ```
 
-**Рисунок 13 — AST функции main для индивидуального задания**
+**Рисунок 10 — AST функции main для индивидуального задания**
 
 image
 
@@ -233,11 +233,11 @@ grep -n "define\|alloca\|store\|load\|private\|printf" strings_00.ll
 grep -n "define\|alloca\|store\|load\|private\|printf" strings_02.ll
 ```
 
-**Рисунок 14 — IR strings.c без оптимизации**
+**Рисунок 11 — IR strings.c без оптимизации**
 
 image
 
-**Рисунок 15 — сравнение ключевых инструкций IR strings.c до и после оптимизации**
+**Рисунок 12 — сравнение ключевых инструкций IR strings.c до и после оптимизации**
 
 image
 
@@ -252,7 +252,7 @@ opt -passes=mergefunc,mergeicmps -S strings_02.ll -o strings_merge.ll
 diff strings_02.ll strings_merge.ll
 ```
 
-**Рисунок 16 — сравнение strings_02.ll и strings_merge.ll через diff**
+**Рисунок 13 — сравнение strings_02.ll и strings_merge.ll через diff**
 
 image
 
@@ -268,11 +268,7 @@ dot -Tpng .main.dot -o cfg_strings_00.png
 xdg-open cfg_strings_00.png
 ```
 
-**Рисунок 17 — создание CFG для strings.c без оптимизации**
-
-image
-
-**Рисунок 18 — CFG функции main для strings.c без оптимизации**
+**Рисунок 14 — CFG функции main для strings.c без оптимизации**
 
 image
 
@@ -282,7 +278,7 @@ dot -Tpng .main.dot -o cfg_strings_02.png
 xdg-open cfg_strings_02.png
 ```
 
-**Рисунок 19 — CFG функции main для strings.c после оптимизации -O2**
+**Рисунок 15 — CFG функции main для strings.c после оптимизации -O2**
 
 image
 
