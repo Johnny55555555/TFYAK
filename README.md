@@ -36,6 +36,7 @@ sudo apt update
 sudo apt install -y clang llvm llvm-dev llvm-runtime graphviz xdg-utils
 ````
 
+<img src="Скриншоты/С1.png" width="700">
 **Рисунок 1 — установка пакетов LLVM, Clang и Graphviz**
 
 После установки были проверены версии основных инструментов. Проверка выполнялась командами clang --version, opt --version, dot -V и llvm-config --version.
